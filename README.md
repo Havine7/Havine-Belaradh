@@ -36,7 +36,7 @@ Sans endpoint, le bouton d’envoi est désactivé et une explication est affich
 
 Avant publication commerciale : compléter les mentions légales et la politique de confidentialité dans `src/App.tsx` avec les coordonnées, le statut, l’hébergeur, le prestataire de formulaire et la conservation des données. Aucun renseignement légal n’a été inventé. Confirmer les conditions commerciales et fiscales. Les tarifs indiqués sont des frais uniques de création ; domaine, abonnements et maintenance sont exclus.
 
-Le référencement de base comprend langue, titre, description, Open Graph, structure de titres et textes alternatifs. Les démos sont rendues côté client. Après choix du domaine final, ajouter des URL canoniques et un sitemap adapté. Les images proviennent d’Unsplash et les polices de Google Fonts : une connexion Internet est nécessaire à ces ressources, avec polices de repli en cas d’échec. Pour supprimer ces connexions tierces, héberger des ressources locales avec les licences appropriées.
+Le référencement de base comprend langue, titre, description, Open Graph, structure de titres et textes alternatifs. Les démos sont rendues côté client. Après choix du domaine final, ajouter des URL canoniques et un sitemap adapté. Les illustrations SVG originales et les polices Inter / Cormorant Garamond sont hébergées localement. Les licences des polices sont conservées dans `public/fonts`. Aucune dépendance de production supplémentaire n’a été ajoutée pour la refonte.
 
 ## Enregistrer sur GitHub
 
@@ -51,3 +51,13 @@ git push origin HEAD:main
 ```
 
 La branche locale peut être `work`. Pour un flux avec revue, pousser plutôt sur une branche dédiée : `git push origin HEAD:portfolio`, puis ouvrir une pull request vers `main`. Ne pas committer `.env.local`, `node_modules` ou `dist`. L’authentification et les droits de push doivent être disponibles. Aucun commit ni push n’est effectué automatiquement par ce projet.
+
+## Direction artistique du portfolio
+
+Fond #F8F7F5, texte #171717, identité #711D32, gris #77716F ; ciel et rose limités à deux points décoratifs. Titres en Cormorant Garamond, textes en Inter. Les aperçus des réalisations sont des compositions illustrées cliquables ouvrant les trois sites, pas des captures d’écran. Les prix et les prestations restent inchangés.
+
+Les apparitions au défilement utilisent IntersectionObserver et restent désactivées en mouvement réduit. Le contenu reste visible si l’observer n’est pas disponible. Un lien d’évitement et des indicateurs de focus permettent la navigation au clavier.
+
+Pour visualiser la branche sans publication : `git switch portfolio`, `npm ci`, `npm run dev`. Pour vérifier le résultat de production : `npm run build`, puis `npm run preview`. Aucune mise en ligne n’est nécessaire.
+
+Vérification de la refonte : 14 tests Vitest, compilation TypeScript/Vite et contrôles Chromium sur le build de production à 320, 390, 768 et 1440 px. Chargement des illustrations et polices, absence de débordement horizontal, sélection des packs, contact inactif sans endpoint et parcours des trois démos vérifiés. Mouvement réduit et lien d’évitement clavier vérifiés. Cela ne remplace pas une revue sur appareils réels et sur Safari / Firefox. Le gris des petits textes est légèrement assombri pour dépasser un contraste de 4,5:1 sur le fond blanc cassé.
