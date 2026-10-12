@@ -11,14 +11,50 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { demos, demoKey, plans, type DemoKey } from "./content";
-const photo = (id: string, _width = 1200) => {
+const photo = (id: string, width = 1024) => {
   const images: Record<string, string> = {
-    "photo-1509440159596-0249088772ff": "/images/boulangerie.svg",
-    "photo-1562322140-8baeececf3df": "/images/coiffure.svg",
-    "photo-1620626011761-996317b8d101": "/images/plombier.svg",
+    "photo-1509440159596-0249088772ff": "boulangerie",
+    "photo-1562322140-8baeececf3df": "coiffure",
+    "photo-1620626011761-996317b8d101": "plombier",
   };
-  return images[id];
+  const size = width <= 400 ? 400 : width <= 700 ? 700 : 1024;
+  return `/images/${images[id]}-${size}.webp`;
 };
+function usePhotoDepth() {
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const frames = document.querySelectorAll<HTMLElement>(".photo-depth");
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      frames.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const progress = Math.min(
+          1,
+          Math.max(
+            0,
+            (window.innerHeight - rect.top) /
+              (window.innerHeight + rect.height),
+          ),
+        );
+        el.style.setProperty("--photo-scale", String(1.025 + progress * 0.045));
+      });
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    schedule();
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      cancelAnimationFrame(frame);
+      frames.forEach((el) => el.style.removeProperty("--photo-scale"));
+    };
+  }, []);
+}
 function useReveal() {
   useEffect(() => {
     if (
@@ -38,7 +74,7 @@ function useReveal() {
       { threshold: 0.08 },
     );
     const elements = document.querySelectorAll(
-      ".section-heading, .service, .project, .price-card, .about, .faq, .contact",
+      ".section-heading, .service, .project, .price-card, .about, .faq, .contact, .demo-section",
     );
     elements.forEach((el) => {
       if (el.getBoundingClientRect().top > window.innerHeight) {
@@ -236,6 +272,7 @@ function Contact() {
 }
 function Portfolio() {
   useReveal();
+  usePhotoDepth();
   return (
     <div className="portfolio">
       <a className="skip-link" href="#contenu">
@@ -248,39 +285,54 @@ function Portfolio() {
             <span>HAVINE BELARADH — DESIGN & DÉVELOPPEMENT WEB</span>
             <span>Portfolio / 2026</span>
           </div>
-          <div className="hero-copy">
-            <h1>
-              Le beau au service
-              <br />
-              de votre <span className="serif accent">ambition.</span>
-            </h1>
-            <div className="hero-bottom-row">
-              <div className="hero-index" aria-hidden="true">
-                (01 — 06)
+          <div className="hero-layout">
+            <div className="hero-copy">
+              <span className="hero-kicker">
+                DES SITES SINGULIERS. UNE PRÉSENCE JUSTE.
+              </span>
+              <h1>
+                Le beau
+                <br />
+                au service de
+                <br />
+                votre <span className="serif accent">ambition.</span>
+              </h1>
+              <p className="hero-lead">
+                Des sites vitrines pour les commerçants, les artisans et les
+                petites entreprises. Du caractère, du soin, et le sens de
+                l’essentiel.
+              </p>
+              <div className="hero-actions">
+                <a className="button" href="#contact">
+                  Demander mon site <ArrowUpRight size={18} />
+                </a>
+                <a className="text-link" href="#realisations">
+                  Explorer les projets <ArrowRight size={17} />
+                </a>
               </div>
-              <div className="hero-intro">
-                <p>
-                  Des sites vitrines pensés pour les commerçants, les artisans
-                  et les petites entreprises. Une présence juste, soignée, à
-                  votre image.
-                </p>
-                <div className="hero-actions">
-                  <a className="button" href="#contact">
-                    Demander mon site <ArrowUpRight size={18} />
-                  </a>
-                  <a className="text-link" href="#realisations">
-                    Explorer les projets <ArrowRight size={17} />
-                  </a>
-                </div>
+              <div className="hero-detail">
+                <span>DESIGN & DÉVELOPPEMENT</span>
+                <span>À PARTIR DE 50 €</span>
               </div>
             </div>
-          </div>
-          <div className="hero-editorial" aria-hidden="true">
-            <span>Le sens du détail.</span>
-            <div className="editorial-mark">
-              h<span>.</span>
-            </div>
-            <span>Des idées aux pixels.</span>
+            <figure className="hero-visual">
+              <div className="hero-image photo-depth">
+                <img
+                  src={photo(demos.coiffure.image)}
+                  srcSet={`${photo(demos.coiffure.image, 400)} 400w, ${photo(demos.coiffure.image, 700)} 700w, ${photo(demos.coiffure.image, 1024)} 1024w`}
+                  sizes="(max-width: 640px) 90vw, 46vw"
+                  width="1024"
+                  height="1536"
+                  fetchPriority="high"
+                  alt="Composition photoréaliste d’un salon raffiné aux matières bois et bronze"
+                />
+                <span className="visual-index">01 / STUDIO ÉCLAT</span>
+              </div>
+              <figcaption>
+                <span>La matière. La lumière. Le détail.</span>
+                <span>PROJET FICTIF</span>
+              </figcaption>
+            </figure>
           </div>
         </section>
         <div className="trust-strip">
@@ -380,7 +432,7 @@ function Portfolio() {
                     <span>{d.name}</span>
                     <span>Site de démonstration ↗</span>
                   </div>
-                  <div className="preview-content">
+                  <div className="preview-content photo-depth">
                     <div className="preview-copy">
                       <span>{d.eyebrow}</span>
                       <h4>{d.title}</h4>
@@ -389,17 +441,17 @@ function Portfolio() {
                     <img
                       loading="lazy"
                       decoding="async"
-                      width="900"
-                      height="1050"
+                      width="1024"
+                      height="1536"
                       sizes="(max-width: 640px) 48vw, (max-width: 900px) 38vw, 360px"
-                      srcSet={`${photo(d.image, 400)} 400w, ${photo(d.image, 700)} 700w, ${photo(d.image, 1000)} 1000w`}
+                      srcSet={`${photo(d.image, 400)} 400w, ${photo(d.image, 700)} 700w, ${photo(d.image, 1024)} 1024w`}
                       src={photo(d.image, 700)}
                       alt={
                         i === 0
-                          ? "Illustration originale de pains artisanaux"
+                          ? "Composition photoréaliste de pains artisanaux"
                           : i === 1
-                            ? "Illustration originale d’un salon de coiffure"
-                            : "Illustration originale d’une salle de bain"
+                            ? "Composition photoréaliste d’un salon de coiffure"
+                            : "Composition photoréaliste d’une salle de bain"
                       }
                     />
                   </div>
@@ -549,6 +601,8 @@ function Portfolio() {
   );
 }
 function Demo({ id }: { id: DemoKey }) {
+  useReveal();
+  usePhotoDepth();
   const d = demos[id];
   const [notice, setNotice] = useState("");
   useEffect(() => {
@@ -581,7 +635,7 @@ function Demo({ id }: { id: DemoKey }) {
       </header>
       <main>
         <section className="demo-hero">
-          <div>
+          <div className="demo-hero-copy">
             <span className="eyebrow">{d.eyebrow}</span>
             <h1>{d.title}</h1>
             <p>{d.intro}</p>
@@ -590,16 +644,26 @@ function Demo({ id }: { id: DemoKey }) {
               <ArrowRight size={18} />
             </a>
           </div>
-          <img
-            src={photo(d.image)}
-            alt={
-              d.type === "Boulangerie artisanale"
-                ? "Sélection de pains artisanaux"
-                : d.type === "Salon de coiffure"
-                  ? "Salon de coiffure"
-                  : "Salle de bain et installation sanitaire"
-            }
-          />
+          <div className="demo-hero-photo photo-depth">
+            <img
+              width="1024"
+              height="1536"
+              srcSet={`${photo(d.image, 400)} 400w, ${photo(d.image, 700)} 700w, ${photo(d.image, 1024)} 1024w`}
+              sizes="(max-width: 640px) 100vw, 55vw"
+              fetchPriority="high"
+              src={photo(d.image)}
+              alt={
+                d.type === "Boulangerie artisanale"
+                  ? "Sélection de pains artisanaux"
+                  : d.type === "Salon de coiffure"
+                    ? "Salon de coiffure"
+                    : "Salle de bain et installation sanitaire"
+              }
+            />
+            <span className="demo-photo-caption">
+              COMPOSITION ÉDITORIALE · PROJET FICTIF
+            </span>
+          </div>
         </section>
         <section id="prestations" className="demo-section">
           <span className="eyebrow">
@@ -755,9 +819,9 @@ function Privacy() {
       </p>
       <h2>Images et données techniques</h2>
       <p>
-        Les illustrations originales et les polices sont hébergées avec ce site.
-        Aucun chargement depuis Unsplash ou Google Fonts n’est effectué. Aucun
-        outil d’analyse ni cookie publicitaire n’est installé par ce site.
+        Les visuels photoréalistes générés et les polices sont hébergés avec ce
+        site. Aucun chargement depuis Unsplash ou Google Fonts n’est effectué.
+        Aucun outil d’analyse ni cookie publicitaire n’est installé par ce site.
         L’hébergeur et le prestataire de formulaire peuvent traiter des données
         techniques selon leurs propres politiques.
       </p>
