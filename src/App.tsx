@@ -38,7 +38,14 @@ function usePhotoDepth() {
               (window.innerHeight + rect.height),
           ),
         );
-        el.style.setProperty("--photo-scale", String(1.025 + progress * 0.045));
+        el.style.setProperty(
+          "--photo-scale",
+          String(
+            el.classList.contains("interface-depth")
+              ? 1.003 + progress * 0.009
+              : 1.025 + progress * 0.045,
+          ),
+        );
       });
     };
     const schedule = () => {
@@ -184,7 +191,7 @@ function Contact() {
         </p>
         <div className="contact-note">
           <span className="dot" />
-          Un échange simple, sans engagement.
+          Basé à Lyon · Un échange simple, sans engagement.
         </div>
       </div>
       <form onSubmit={submit}>
@@ -274,82 +281,132 @@ function Portfolio() {
   useReveal();
   usePhotoDepth();
   return (
-    <div className="portfolio">
+    <div className="portfolio editorial-portfolio">
       <a className="skip-link" href="#contenu">
         Aller au contenu
       </a>
       <Header />
       <main id="contenu">
-        <section className="hero">
+        <section className="hero" aria-labelledby="hero-title">
           <div className="hero-topline">
-            <span>HAVINE BELARADH — DESIGN & DÉVELOPPEMENT WEB</span>
-            <span>Portfolio / 2026</span>
+            <span>Studio web indépendant — Lyon</span>
+            <span>Design & développement</span>
           </div>
-          <div className="hero-layout">
-            <div className="hero-copy">
-              <span className="hero-kicker">
-                DES SITES SINGULIERS. UNE PRÉSENCE JUSTE.
+          <div className="hero-copy">
+            <h1 id="hero-title">
+              <span className="title-line">Des sites qui</span>{" "}
+              <span className="title-line serif accent">se distinguent.</span>
+            </h1>
+            <div className="cover-bottom">
+              <span className="cover-index">
+                HAVINE BELARADH
+                <br />
+                LYON, FRANCE
               </span>
-              <h1>
-                Le beau
-                <br />
-                au service de
-                <br />
-                votre <span className="serif accent">ambition.</span>
-              </h1>
-              <p className="hero-lead">
-                Des sites vitrines pour les commerçants, les artisans et les
-                petites entreprises. Du caractère, du soin, et le sens de
-                l’essentiel.
-              </p>
-              <div className="hero-actions">
-                <a className="button" href="#contact">
-                  Demander mon site <ArrowUpRight size={18} />
-                </a>
-                <a className="text-link" href="#realisations">
-                  Explorer les projets <ArrowRight size={17} />
-                </a>
-              </div>
-              <div className="hero-detail">
-                <span>DESIGN & DÉVELOPPEMENT</span>
-                <span>À PARTIR DE 50 €</span>
+              <div className="cover-intro">
+                <p>
+                  Je crée des sites web pour les artisans, les commerçants et
+                  les entrepreneurs. Une présence claire, soignée, avec du
+                  caractère.
+                </p>
+                <div className="hero-actions">
+                  <a className="button" href="#realisations">
+                    Découvrir les réalisations <ArrowUpRight size={19} />
+                  </a>
+                  <a className="text-link" href="#contact">
+                    Parlons de votre projet <ArrowRight size={18} />
+                  </a>
+                </div>
               </div>
             </div>
-            <figure className="hero-visual">
-              <div className="hero-image photo-depth">
-                <img
-                  src={photo(demos.coiffure.image)}
-                  srcSet={`${photo(demos.coiffure.image, 400)} 400w, ${photo(demos.coiffure.image, 700)} 700w, ${photo(demos.coiffure.image, 1024)} 1024w`}
-                  sizes="(max-width: 640px) 90vw, 46vw"
-                  width="1024"
-                  height="1536"
-                  fetchPriority="high"
-                  alt="Composition photoréaliste d’un salon raffiné aux matières bois et bronze"
-                />
-                <span className="visual-index">01 / STUDIO ÉCLAT</span>
-              </div>
-              <figcaption>
-                <span>La matière. La lumière. Le détail.</span>
-                <span>PROJET FICTIF</span>
-              </figcaption>
-            </figure>
+          </div>
+          <div className="cover-footer">
+            <a href="#realisations">
+              Défiler pour découvrir <span aria-hidden="true">↓</span>
+            </a>
+            <span>Création de sites vitrines · À partir de 50 €</span>
           </div>
         </section>
-        <div className="trust-strip">
-          <span>UNE PRÉSENCE WEB À VOTRE IMAGE</span>
-          <span>Commerçants</span>
-          <span>Artisans</span>
-          <span>Indépendants</span>
-          <span>Petites entreprises</span>
-        </div>
-        <section id="services" className="section">
+        <section id="realisations" className="section projects">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">UNE IDÉE DU POSSIBLE</span>
+              <h2>
+                Des univers,
+                <br />
+                <em>à explorer.</em>
+              </h2>
+            </div>
+            <p>
+              Des projets fictifs, de véritables sites à explorer.
+              <br />
+              Imaginez maintenant le vôtre.
+            </p>
+          </div>
+          <div className="project-grid">
+            {Object.entries(demos).map(([key, d], i) => (
+              <article className={`project project-${key}`} key={key}>
+                <div className="project-description">
+                  <span className="project-count">
+                    0{i + 1} / {d.type}
+                  </span>
+                  <h3>{d.name}</h3>
+                  <p>
+                    {i === 0
+                      ? "Le savoir-faire artisanal, dans une vitrine chaleureuse et généreuse."
+                      : i === 1
+                        ? "Une identité raffinée et un parcours simple pour découvrir les prestations."
+                        : "Des services lisibles, une démarche claire et une présentation structurée."}
+                  </p>
+                  <a className="project-visit" href={`/demos/${key}`}>
+                    Explorer la démonstration <ArrowUpRight size={20} />
+                  </a>
+                  <span className="project-fiction">
+                    Projet fictif — aucune mission client revendiquée
+                  </span>
+                </div>
+                <figure className="project-stage">
+                  <a
+                    href={`/demos/${key}`}
+                    className="screen-frame photo-depth interface-depth"
+                    aria-label={`Ouvrir ${d.name}, site de démonstration fictif`}
+                  >
+                    <picture>
+                      <source
+                        media="(max-width: 640px)"
+                        srcSet={`/previews/${key}-mobile.jpg`}
+                      />
+                      <img
+                        className="screen-capture"
+                        src={`/previews/${key}-desktop.jpg`}
+                        loading="lazy"
+                        decoding="async"
+                        width="1280"
+                        height="960"
+                        alt={`Capture réelle de l’interface du site fictif ${d.name}`}
+                      />
+                    </picture>
+                    <span className="screen-open" aria-hidden="true">
+                      <ArrowUpRight size={22} />
+                    </span>
+                  </a>
+                  <figcaption>
+                    <span>Aperçu réel de la démonstration</span>
+                    <span>PROJET FICTIF / {d.type}</span>
+                  </figcaption>
+                </figure>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section id="services" className="section services-editorial">
           <div className="section-heading">
             <div>
               <span className="eyebrow">CE QUE JE FAIS</span>
               <h2>
-                Votre métier,
+                Votre métier.
                 <br />
-                <em>sa vitrine.</em>
+                <em>Sa vitrine.</em>
               </h2>
             </div>
             <p>
@@ -386,84 +443,6 @@ function Portfolio() {
             ))}
           </div>
         </section>
-        <section id="realisations" className="section projects">
-          <div className="section-heading">
-            <div>
-              <span className="eyebrow">UNE IDÉE DU POSSIBLE</span>
-              <h2>
-                Trois métiers.
-                <br />
-                <em>Trois signatures.</em>
-              </h2>
-            </div>
-            <p>
-              Des projets fictifs, de véritables sites à explorer.
-              <br />
-              Imaginez maintenant le vôtre.
-            </p>
-          </div>
-          <div className="project-grid">
-            {Object.entries(demos).map(([key, d], i) => (
-              <a
-                className={`project ${d.color}`}
-                href={`/demos/${key}`}
-                key={key}
-              >
-                <div className="project-description">
-                  <span className="project-count">/ 0{i + 1}</span>
-                  <span className="eyebrow">{d.type}</span>
-                  <h3>{d.name}</h3>
-                  <p>
-                    {i === 0
-                      ? "Un univers chaleureux, où le savoir-faire artisanal prend toute sa place."
-                      : i === 1
-                        ? "Une parenthèse douce, une identité élégante et un parcours tout en simplicité."
-                        : "Une présentation structurée pour découvrir les services et comprendre la démarche."}
-                  </p>
-                  <span className="project-visit">
-                    Explorer la démonstration <ArrowUpRight size={20} />
-                  </span>
-                  <span className="project-fiction">
-                    Projet fictif — site interactif
-                  </span>
-                </div>
-                <div className="project-image">
-                  <div className="preview-bar">
-                    <span>{d.name}</span>
-                    <span>Site de démonstration ↗</span>
-                  </div>
-                  <div className="preview-content photo-depth">
-                    <div className="preview-copy">
-                      <span>{d.eyebrow}</span>
-                      <h4>{d.title}</h4>
-                      <span className="preview-cta">{d.action} ↗</span>
-                    </div>
-                    <img
-                      loading="lazy"
-                      decoding="async"
-                      width="1024"
-                      height="1536"
-                      sizes="(max-width: 640px) 48vw, (max-width: 900px) 38vw, 360px"
-                      srcSet={`${photo(d.image, 400)} 400w, ${photo(d.image, 700)} 700w, ${photo(d.image, 1024)} 1024w`}
-                      src={photo(d.image, 700)}
-                      alt={
-                        i === 0
-                          ? "Composition photoréaliste de pains artisanaux"
-                          : i === 1
-                            ? "Composition photoréaliste d’un salon de coiffure"
-                            : "Composition photoréaliste d’une salle de bain"
-                      }
-                    />
-                  </div>
-                  <div className="preview-footer">
-                    <span>{d.type}</span>
-                    <span>Une démonstration signée havine.</span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
         <section id="tarifs" className="section">
           <div className="section-heading">
             <div>
@@ -486,9 +465,9 @@ function Portfolio() {
                 className={`price-card ${i === 1 ? "featured" : ""}`}
                 key={p.name}
               >
-                {i === 1 && (
-                  <span className="recommended">LE JUSTE ÉQUILIBRE</span>
-                )}
+                <span className="plan-index" aria-hidden="true">
+                  0{i + 1}
+                </span>
                 <h3>{p.name}</h3>
                 <p>{p.description}</p>
                 <div className="price">
@@ -528,21 +507,26 @@ function Portfolio() {
         </section>
         <section className="section about" id="apropos">
           <div className="about-art">
-            <div className="monogram">
-              h<span>.</span>
-            </div>
-            <div className="about-label">Curiosité. Rigueur. Créativité.</div>
+            <span className="about-location">
+              STUDIO WEB INDÉPENDANT
+              <br />
+              LYON, FRANCE
+            </span>
+            <span className="about-wordmark" aria-hidden="true">
+              havine.
+            </span>
+            <span className="about-label">Curiosité. Rigueur. Créativité.</span>
           </div>
           <div>
-            <span className="eyebrow">DERRIÈRE LES PIXELS</span>
+            <span className="eyebrow">LE STUDIO, C’EST AUSSI UNE PERSONNE</span>
             <h2>
               Bonjour,
               <br />
               moi c’est <span className="serif accent">Havine.</span>
             </h2>
             <p>
-              Je m’appelle Havine Belaradh et je suis étudiant en deuxième année
-              de Licence Informatique.
+              Je m’appelle Havine Belaradh. Basé à Lyon, je suis étudiant en
+              deuxième année de Licence Informatique.
             </p>
             <p>
               J’aime transformer des idées en expériences web simples et
@@ -804,9 +788,9 @@ function Privacy() {
       <h1>Confidentialité & informations</h1>
       <h2>Responsable du portfolio</h2>
       <p>
-        Havine Belaradh, étudiant en deuxième année de Licence Informatique. Ce
-        portfolio présente son activité de création de sites web et trois
-        projets fictifs.
+        Havine Belaradh, basé à Lyon, étudiant en deuxième année de Licence
+        Informatique. Ce portfolio présente son activité de création de sites
+        web et trois projets fictifs.
       </p>
       <h2>Formulaire de contact</h2>
       <p>

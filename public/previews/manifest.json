@@ -1,0 +1,54 @@
+{
+  "capturedFromCommit": "665fcc2ed4bfad0d6939bdca62fbe383cd070a04",
+  "description": "Captures réelles des routes de démonstration, sans retouche ni interface inventée. Actualiser après modification des démos.",
+  "captures": [
+    {
+      "route": "/demos/boulangerie",
+      "file": "boulangerie-desktop.jpg",
+      "viewport": {
+        "width": 1280,
+        "height": 960
+      }
+    },
+    {
+      "route": "/demos/boulangerie",
+      "file": "boulangerie-mobile.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 960
+      }
+    },
+    {
+      "route": "/demos/coiffure",
+      "file": "coiffure-desktop.jpg",
+      "viewport": {
+        "width": 1280,
+        "height": 960
+      }
+    },
+    {
+      "route": "/demos/coiffure",
+      "file": "coiffure-mobile.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 960
+      }
+    },
+    {
+      "route": "/demos/plombier",
+      "file": "plombier-desktop.jpg",
+      "viewport": {
+        "width": 1280,
+        "height": 960
+      }
+    },
+    {
+      "route": "/demos/plombier",
+      "file": "plombier-mobile.jpg",
+      "viewport": {
+        "width": 390,
+        "height": 960
+      }
+    }
+  ]
+}
